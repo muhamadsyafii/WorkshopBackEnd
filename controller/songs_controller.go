@@ -16,38 +16,45 @@ import (
  * All Rights Reserved
  */
 
-type AlbumsController struct {
-	serviceAlbums service.AlbumsService
+type SongController struct {
+	serviceSongs service.SongService
 }
 
-func New(albumsService service.AlbumsService) *AlbumsController {
-	return &AlbumsController{
-		serviceAlbums: albumsService,
+func NewSongs(songService service.SongService) *SongController {
+	return &SongController{
+		serviceSongs: songService,
 	}
 }
-func (c *AlbumsController) FindAllAlbums(ctx *gin.Context) {
+
+func (c *SongController) FindAllSongs(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  true,
 		"message": "Berhasil Menampilkan Data",
-		"data":    c.serviceAlbums.FindAllAlbums(),
+		"data":    c.serviceSongs.FindSongs(),
 	})
 }
 
-func (c *AlbumsController) SaveAlbums(ctx *gin.Context) {
-	var albums entity.Albums
+func (c *SongController) SaveSongs(ctx *gin.Context) {
+	var songs entity.Songs
 	ctx.Header("Content-Type", "application/json")
-	ctx.BindJSON(&albums)
+	if err := ctx.Bind(&songs); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  true,
 		"message": "Berhasil Menampilkan Data",
-		"data":    c.serviceAlbums.SaveAlbums(albums),
+		"data":    c.serviceSongs.SaveSongs(songs),
 	})
 }
 
-func (c *AlbumsController) UpdateAlbums(ctx *gin.Context) {
-	var albums entity.Albums
-	if err := ctx.ShouldBindJSON(&albums); err != nil {
+func (c *SongController) UpdateSongs(ctx *gin.Context) {
+	var songs entity.Songs
+	if err := ctx.ShouldBindJSON(&songs); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  false,
 			"message": err.Error(),
@@ -55,30 +62,30 @@ func (c *AlbumsController) UpdateAlbums(ctx *gin.Context) {
 		return
 	}
 	ctx.Header("Content-Type", "application/json")
-	ctx.BindJSON(&albums)
+	ctx.BindJSON(&songs)
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  true,
 		"message": "Berhasil Menampilkan Data",
-		"data":    c.serviceAlbums.UpdateAlbums(albums),
+		"data":    c.serviceSongs.UpdateSongs(songs),
 	})
 }
 
-func (c *AlbumsController) DeleteAlbums(ctx *gin.Context) {
-	var albums entity.Albums
+func (c *SongController) DeleteSongs(ctx *gin.Context) {
+	var songs entity.Songs
 	id, _ := strconv.Atoi(ctx.Param("id"))
-	albums.ID = uint(id)
+	songs.ID = uint(id)
 	ctx.Header("Content-Type", "application/json")
-	c.serviceAlbums.DeleteAlbums(albums)
+	c.serviceSongs.DeleteSongs(songs)
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  true,
-		"message": "Berhasil Menghapus Albums",
+		"message": "Berhasil Menghapus Songs",
 	})
 }
 
-func (c *AlbumsController) DetailAlbums(ctx *gin.Context) {
-	var albums entity.Albums
+func (c *SongController) DetailSongs(ctx *gin.Context) {
+	var songs entity.Songs
 	id, err := strconv.Atoi(ctx.Param("id"))
-	albums.ID = uint(id)
+	songs.ID = uint(id)
 	ctx.Header("Content-Type", "application/json")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -90,6 +97,6 @@ func (c *AlbumsController) DetailAlbums(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  true,
 		"message": "Berhasil Menampilkan Data",
-		"data":    c.serviceAlbums.DetailAlbums(albums),
+		"data":    c.serviceSongs.DetailSongs(songs),
 	})
 }

@@ -21,5 +21,6 @@ func Run() {
 
 func routes() {
 	v1 := router.Group("/api/v1")
+	SongsRouters(v1)
 	AlbumsRouters(v1)
 }

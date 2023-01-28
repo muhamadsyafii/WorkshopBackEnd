@@ -9,17 +9,17 @@ package repository
  */
 
 import (
-	"finalProjectGOMoladin/model/response"
+	"finalProjectGOMoladin/entity"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 type SongRepository interface {
-	FindSongs() []response.Songs
-	SaveSongs(songs response.Songs)
-	UpdateSongs(songs *response.Songs)
-	DeleteSongs(songs *response.Songs)
-	FindSongsById(songs response.Songs) response.Songs
+	FindSongs() []entity.Songs
+	SaveSongs(songs entity.Songs)
+	UpdateSongs(songs *entity.Songs)
+	DeleteSongs(songs *entity.Songs)
+	FindSongsById(songs entity.Songs) entity.Songs
 }
 
 type SongsDb struct {
@@ -32,31 +32,31 @@ func NewSongRepository() SongRepository {
 	if err != nil {
 		panic("error")
 	}
-	//db.AutoMigrate(&response.Songs{})
+	//db.AutoMigrate(&entity.Songs{})
 	return &SongsDb{
 		conn: db,
 	}
 }
 
-func (d *SongsDb) FindSongs() []response.Songs {
-	var songs []response.Songs
+func (d *SongsDb) FindSongs() []entity.Songs {
+	var songs []entity.Songs
 	d.conn.Find(&songs)
 	return songs
 }
 
-func (d *SongsDb) SaveSongs(songs response.Songs) {
+func (d *SongsDb) SaveSongs(songs entity.Songs) {
 	d.conn.Create(&songs)
 }
 
-func (d *SongsDb) DeleteSongs(songs *response.Songs) {
+func (d *SongsDb) DeleteSongs(songs *entity.Songs) {
 	d.conn.Delete(&songs)
 }
 
-func (d *SongsDb) UpdateSongs(songs *response.Songs) {
+func (d *SongsDb) UpdateSongs(songs *entity.Songs) {
 	d.conn.Save(&songs)
 }
 
-func (d *SongsDb) FindSongsById(songs response.Songs) response.Songs {
+func (d *SongsDb) FindSongsById(songs entity.Songs) entity.Songs {
 	d.conn.Find(&songs, songs.ID)
 	return songs
 }

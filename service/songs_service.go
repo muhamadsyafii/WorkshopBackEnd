@@ -9,46 +9,46 @@ package service
  */
 
 import (
-	"finalProjectGOMoladin/model/response"
+	"finalProjectGOMoladin/entity"
 	"finalProjectGOMoladin/repository"
 )
 
 type SongService interface {
-	FindSongs() []response.Songs
-	SaveSongs(songs response.Songs) response.Songs
-	UpdateSongs(songs response.Songs) response.Songs
-	DeleteSongs(songs response.Songs)
-	DetailSongs(songs response.Songs) response.Songs
+	FindSongs() []entity.Songs
+	SaveSongs(songs entity.Songs) entity.Songs
+	UpdateSongs(songs entity.Songs) entity.Songs
+	DeleteSongs(songs entity.Songs)
+	DetailSongs(songs entity.Songs) entity.Songs
 }
 
 type songService struct {
 	repository repository.SongRepository
 }
 
-func NewSong(songRepository repository.SongRepository) SongService {
+func NewSongs(songRepository repository.SongRepository) SongService {
 	return &songService{
 		repository: songRepository,
 	}
 }
 
-func (u *songService) FindSongs() []response.Songs {
+func (u *songService) FindSongs() []entity.Songs {
 	return u.repository.FindSongs()
 }
 
-func (u *songService) SaveSongs(songs response.Songs) response.Songs {
+func (u *songService) SaveSongs(songs entity.Songs) entity.Songs {
 	u.repository.SaveSongs(songs)
 	return songs
 }
 
-func (u *songService) UpdateSongs(songs response.Songs) response.Songs {
+func (u *songService) UpdateSongs(songs entity.Songs) entity.Songs {
 	u.repository.UpdateSongs(&songs)
 	return songs
 }
 
-func (u *songService) DeleteSongs(songs response.Songs) {
+func (u *songService) DeleteSongs(songs entity.Songs) {
 	u.repository.DeleteSongs(&songs)
 }
-func (u *songService) DetailSongs(songs response.Songs) response.Songs {
+func (u *songService) DetailSongs(songs entity.Songs) entity.Songs {
 	res := u.repository.FindSongsById(songs)
 	return res
 }

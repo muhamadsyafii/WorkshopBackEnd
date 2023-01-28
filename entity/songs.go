@@ -1,15 +1,13 @@
-package response
+package entity
 
 import "time"
 
 type Songs struct {
-	ID        uint `gorm:"primaryKey" json:"-"`
-	AlbumId   uint
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	AlbumId   uint      `json:"album_Id"`
 	Title     string    `json:"title"`
 	Author    string    `json:"author"`
 	CreatedAt time.Time `json:"created_at"`
-	UpdateAt  time.Time `json:"update_at"`
+	UpdateAt  time.Time `json:"updated_at"`
 	Albums    []Albums  `gorm:"foreignKey:ID;references:AlbumsId"`
 }
-
-//`gorm:"foreignKey:ID;references:AlbumsId"`

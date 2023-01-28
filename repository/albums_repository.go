@@ -9,17 +9,17 @@ package repository
  */
 
 import (
-	"finalProjectGOMoladin/model/response"
+	"finalProjectGOMoladin/entity"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 type AlbumsRepository interface {
-	FindAlbums() []response.Albums
-	SaveAlbums(albums response.Albums)
-	UpdateAlbums(albums *response.Albums)
-	DeleteAlbums(albums *response.Albums)
-	FindAlbumsById(albums response.Albums) response.Albums
+	FindAlbums() []entity.Albums
+	SaveAlbums(albums entity.Albums)
+	UpdateAlbums(albums *entity.Albums)
+	DeleteAlbums(albums *entity.Albums)
+	FindAlbumsById(albums entity.Albums) entity.Albums
 }
 
 type AlbumsDb struct {
@@ -32,31 +32,31 @@ func NewAlbumsRepository() AlbumsRepository {
 	if err != nil {
 		panic("error")
 	}
-	//db.AutoMigrate(&response.Albums{})
+	//db.AutoMigrate(&entity.Albums{})
 	return &AlbumsDb{
 		conn: db,
 	}
 }
 
-func (d *AlbumsDb) FindAlbums() []response.Albums {
-	var users []response.Albums
+func (d *AlbumsDb) FindAlbums() []entity.Albums {
+	var users []entity.Albums
 	d.conn.Find(&users)
 	return users
 }
 
-func (d *AlbumsDb) SaveAlbums(albums response.Albums) {
+func (d *AlbumsDb) SaveAlbums(albums entity.Albums) {
 	d.conn.Create(&albums)
 }
 
-func (d *AlbumsDb) DeleteAlbums(albums *response.Albums) {
+func (d *AlbumsDb) DeleteAlbums(albums *entity.Albums) {
 	d.conn.Delete(&albums)
 }
 
-func (d *AlbumsDb) UpdateAlbums(albums *response.Albums) {
+func (d *AlbumsDb) UpdateAlbums(albums *entity.Albums) {
 	d.conn.Save(&albums)
 }
 
-func (d *AlbumsDb) FindAlbumsById(albums response.Albums) response.Albums {
+func (d *AlbumsDb) FindAlbumsById(albums entity.Albums) entity.Albums {
 	d.conn.Find(&albums, albums.ID)
 	return albums
 }

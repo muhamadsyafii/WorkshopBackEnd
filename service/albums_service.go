@@ -9,16 +9,16 @@ package service
  */
 
 import (
-	"finalProjectGOMoladin/model/response"
+	"finalProjectGOMoladin/entity"
 	"finalProjectGOMoladin/repository"
 )
 
 type AlbumsService interface {
-	FindAllAlbums() []response.Albums
-	SaveAlbums(users response.Albums) response.Albums
-	DeleteAlbums(users response.Albums)
-	UpdateAlbums(users response.Albums) response.Albums
-	DetailAlbums(users response.Albums) response.Albums
+	FindAllAlbums() []entity.Albums
+	SaveAlbums(users entity.Albums) entity.Albums
+	DeleteAlbums(users entity.Albums)
+	UpdateAlbums(users entity.Albums) entity.Albums
+	DetailAlbums(users entity.Albums) entity.Albums
 }
 
 type albumsService struct {
@@ -31,25 +31,25 @@ func NewAlbums(albumsRepository repository.AlbumsRepository) AlbumsService {
 	}
 }
 
-func (u *albumsService) FindAllAlbums() []response.Albums {
+func (u *albumsService) FindAllAlbums() []entity.Albums {
 	return u.albumsRepository.FindAlbums()
 }
 
-func (u *albumsService) SaveAlbums(albums response.Albums) response.Albums {
+func (u *albumsService) SaveAlbums(albums entity.Albums) entity.Albums {
 	u.albumsRepository.SaveAlbums(albums)
 	return albums
 }
 
-func (u *albumsService) DeleteAlbums(albums response.Albums) {
+func (u *albumsService) DeleteAlbums(albums entity.Albums) {
 	u.albumsRepository.DeleteAlbums(&albums)
 }
 
-func (u *albumsService) UpdateAlbums(albums response.Albums) response.Albums {
+func (u *albumsService) UpdateAlbums(albums entity.Albums) entity.Albums {
 	u.albumsRepository.UpdateAlbums(&albums)
 	return albums
 }
 
-func (u *albumsService) DetailAlbums(albums response.Albums) response.Albums {
+func (u *albumsService) DetailAlbums(albums entity.Albums) entity.Albums {
 	res := u.albumsRepository.FindAlbumsById(albums)
 	return res
 }
