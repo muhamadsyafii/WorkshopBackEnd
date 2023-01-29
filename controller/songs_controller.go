@@ -26,12 +26,21 @@ func NewSongs(songService service.SongService) *SongController {
 	}
 }
 
-func (c *SongController) FindAllSongs(ctx *gin.Context) {
+func (c *SongController) FindSongsByAlbums(ctx *gin.Context) {
 	ctx.Header("Content-Type", "application/json")
+	idAlbums, err := strconv.Atoi(ctx.Param("idAlbums"))
+	data, err := c.serviceSongs.FindSongsByAlbums(uint(idAlbums))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status":  false,
+			"message": err.Error(),
+		})
+		return
+	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  true,
 		"message": "Berhasil Menampilkan Data",
-		"data":    c.serviceSongs.FindSongs(),
+		"data":    data,
 	})
 }
 

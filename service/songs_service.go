@@ -14,7 +14,7 @@ import (
 )
 
 type SongService interface {
-	FindSongs() []entity.Songs
+	FindSongsByAlbums(idAlbums uint) ([]entity.Songs, error)
 	SaveSongs(songs entity.Songs) entity.Songs
 	UpdateSongs(songs entity.Songs) entity.Songs
 	DeleteSongs(songs entity.Songs)
@@ -31,8 +31,8 @@ func NewSongs(songRepository repository.SongRepository) SongService {
 	}
 }
 
-func (u *songService) FindSongs() []entity.Songs {
-	return u.repository.FindSongs()
+func (u *songService) FindSongsByAlbums(idAlbums uint) ([]entity.Songs, error) {
+	return u.repository.FindSongsByAlbums(idAlbums)
 }
 
 func (u *songService) SaveSongs(songs entity.Songs) entity.Songs {

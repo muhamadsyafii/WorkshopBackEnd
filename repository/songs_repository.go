@@ -12,10 +12,11 @@ import (
 	"finalProjectGOMoladin/entity"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"time"
 )
 
 type SongRepository interface {
-	FindSongs() []entity.Songs
+	FindSongsByAlbums(idAlbums uint) ([]entity.Songs, error)
 	SaveSongs(songs entity.Songs)
 	UpdateSongs(songs *entity.Songs)
 	DeleteSongs(songs *entity.Songs)
@@ -38,10 +39,10 @@ func NewSongRepository() SongRepository {
 	}
 }
 
-func (d *SongsDb) FindSongs() []entity.Songs {
+func (d *SongsDb) FindSongsByAlbums(idAlbums uint) ([]entity.Songs, error) {
 	var songs []entity.Songs
-	d.conn.Find(&songs)
-	return songs
+	err := d.conn.Model(&entity.Songs{}).Scan(&songs).Find(&songs, "album_id=?", idAlbums).Error
+	return songs, err
 }
 
 func (d *SongsDb) SaveSongs(songs entity.Songs) {
@@ -53,7 +54,12 @@ func (d *SongsDb) DeleteSongs(songs *entity.Songs) {
 }
 
 func (d *SongsDb) UpdateSongs(songs *entity.Songs) {
-	d.conn.Save(&songs)
+	var requestSong entity.Songs
+	requestSong.AlbumId = songs.AlbumId
+	requestSong.Title = songs.Title
+	requestSong.Author = songs.Author
+	requestSong.CreatedAt = time.Now()
+	d.conn.Where("id = ?", songs.ID).Updates(&requestSong)
 }
 
 func (d *SongsDb) FindSongsById(songs entity.Songs) entity.Songs {

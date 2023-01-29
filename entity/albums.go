@@ -8,4 +8,5 @@ type Albums struct {
 	Year      uint      `json:"year" binding:"required"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+	Songs     []Songs   `gorm:"foreignKey:AlbumId;references:ID" json:"albums"`
 }

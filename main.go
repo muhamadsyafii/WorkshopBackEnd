@@ -19,6 +19,9 @@ import (
  */
 
 func main() {
-	gin.SetMode(gin.ReleaseMode)
+	/*
+	* Switch if error mode from debug mode to ReleaseMode
+	 */
+	gin.SetMode(gin.DebugMode)
 	router.Run()
 }

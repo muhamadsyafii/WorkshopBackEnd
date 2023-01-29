@@ -3,6 +3,7 @@ package controller
 import (
 	"finalProjectGOMoladin/entity"
 	"finalProjectGOMoladin/service"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -26,11 +27,13 @@ func New(albumsService service.AlbumsService) *AlbumsController {
 	}
 }
 func (c *AlbumsController) FindAllAlbums(ctx *gin.Context) {
+	albums := c.serviceAlbums.FindAllAlbums()
+	fmt.Println(albums)
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":  true,
 		"message": "Berhasil Menampilkan Data",
-		"data":    c.serviceAlbums.FindAllAlbums(),
+		"data":    albums,
 	})
 }
 

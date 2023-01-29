@@ -17,7 +17,7 @@ import (
 
 func SongsRouters(rg *gin.RouterGroup) {
 	rest := controller.NewSongs(service.NewSongs(repository.NewSongRepository()))
-	rg.GET("/songs", rest.FindAllSongs)
+	rg.GET("/songs/albums/:idAlbums", rest.FindSongsByAlbums)
 	rg.POST("/songs", rest.SaveSongs)
 	rg.PUT("/songs", rest.UpdateSongs)
 	rg.DELETE("/songs/:id", rest.DeleteSongs)

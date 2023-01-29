@@ -10,8 +10,10 @@ package repository
 
 import (
 	"finalProjectGOMoladin/entity"
+	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"time"
 )
 
 type AlbumsRepository interface {
@@ -39,9 +41,13 @@ func NewAlbumsRepository() AlbumsRepository {
 }
 
 func (d *AlbumsDb) FindAlbums() []entity.Albums {
-	var users []entity.Albums
-	d.conn.Find(&users)
-	return users
+	albums := make([]entity.Albums, 0)
+	err := d.conn.Find(&albums).Error
+	if err != nil {
+		fmt.Println("Erorororor")
+		return nil
+	}
+	return albums
 }
 
 func (d *AlbumsDb) SaveAlbums(albums entity.Albums) {
@@ -53,7 +59,11 @@ func (d *AlbumsDb) DeleteAlbums(albums *entity.Albums) {
 }
 
 func (d *AlbumsDb) UpdateAlbums(albums *entity.Albums) {
-	d.conn.Save(&albums)
+	var requestAlbums entity.Albums
+	requestAlbums.Name = albums.Name
+	requestAlbums.Year = albums.Year
+	requestAlbums.CreatedAt = time.Now()
+	d.conn.Where("id = ?", albums.ID).Updates(&requestAlbums)
 }
 
 func (d *AlbumsDb) FindAlbumsById(albums entity.Albums) entity.Albums {
